@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <title>GN SHOP - Home</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Share+Tech+Mono&display=swap">
+    <style>
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #181818 0%, #232323 100%);
+            color: #f5c542;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            padding: 18px 40px;
+            border-bottom: 2px solid #f5c542;
+            box-shadow: 0 2px 10px #f5c54222;
+        }
+        .navbar .logo {
+            height: 60px;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+        .navbar .nav-links a {
+            color: #ffd700;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .navbar .nav-links a:hover {
+            color: #fff;
+            text-shadow: 0 0 8px #f5c54288;
+        }
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 100px);
+            min-height: 500px;
+        }
+        .main-title {
+            font-size: 8vw;
+            color: #ffd700;
+            text-shadow: 0 0 40px #f5c54288, 0 0 10px #000;
+            letter-spacing: 5px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .subtitle {
+            font-size: 2vw;
+            color: #fffbe7;
+            text-shadow: 0 0 10px #f5c54255;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-top: 0;
+        }
+        @media (max-width: 600px) {
+            .main-title { font-size: 12vw; }
+            .subtitle { font-size: 4vw; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="{% static 'images/gn_oro.png' %}" alt="Logo GN SHOP" class="logo">
+        <div class="nav-links">
+            <a href="{% url 'home' %}">HOME</a>
+            <a href="{% url 'ordini' %}">ORDINI</a>
+            <a href="{% url 'news' %}">NEWS</a>
+            <a href="{% url 'catalogo' %}">CATALOGO</a>
+            <a href="{% url 'programma_fidelity' %}">PROGRAMMA FIDELITY</a>
+            <a href="{% url 'contatti' %}">CONTATTI</a>
+            <a href="{% url 'recensioni' %}">RECENSIONI</a>
+            <a href="{% url 'staff' %}">STAFF</a>
+
+        </div>
+    </div>
+    <div class="center-content">
+        <div class="main-title">GN SHOP</div>
+        <div class="subtitle">ACQUISTA O NOLEGGIA IL TUO VIDEOGIOCO PREFERITO</div>
+    </div>
+</body>
+</html>

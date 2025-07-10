@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <title>Login - GN SHOP</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Share+Tech+Mono&display=swap">
+    <style>
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #181818 0%, #232323 100%);
+            color: #f5c542;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            width: 400px;
+            margin: 100px auto;
+            background: #111;
+            padding: 30px 25px 25px 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px #f5c54244, 0 0 10px #000;
+            border: 2px solid #f5c542;
+            position: relative;
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px #f5c54288;
+        }
+        .login-icon {
+            display: block;
+            margin: 0 auto 15px auto;
+            width: 180px;
+            height: 120px;
+        }
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 18px 0;
+            background: #232323;
+            border: 1px solid #ffd700;
+            color: #ffd700;
+            border-radius: 4px;
+            font-size: 1em;
+            transition: border 0.2s;
+        }
+        input[type=text]:focus, input[type=password]:focus {
+            border: 1.5px solid #f5c542;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(90deg, #ffd700 0%, #b8860b 100%);
+            color: #181818;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px #f5c54255;
+            transition: background 0.2s, color 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%);
+            color: #fff;
+        }
+        .register-btn {
+            background: linear-gradient(90deg, #b8860b 0%, #ffd700 100%);
+            color: #fff;
+            margin-top: 10px;
+        }
+        .register-btn:hover {
+            background: linear-gradient(90deg, #ffd700 0%, #b8860b 100%);
+            color: #181818;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <img src="{% static 'images/gn_oro.png' %}" alt="Game Icon" class="login-icon">
+    <h2>GN Shop Login</h2>
+    {% if messages %}
+        <ul style="color: #ff4444; text-align: center; list-style: none; padding: 0;">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post" action="/login/">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Accedi</button>
+</form>
+<form action="/register/" method="get">
+    <button type="submit" class="register-btn">Registrati</button>
+</form>
+</div>
+</body>
+</html>

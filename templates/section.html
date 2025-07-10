@@ -1,0 +1,476 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ section_name }} - GN SHOP</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Share+Tech+Mono&display=swap">
+    <style>
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: linear-gradient(135deg, #181818 0%, #232323 100%);
+            color: #f5c542;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111;
+            padding: 18px 40px;
+            border-bottom: 2px solid #f5c542;
+            box-shadow: 0 2px 10px #f5c54222;
+        }
+        .navbar .logo {
+            height: 60px;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+        .navbar .nav-links a {
+            color: #ffd700;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .navbar .nav-links a:hover {
+            color: #fff;
+            text-shadow: 0 0 8px #f5c54288;
+        }
+        .center-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 100px);
+            min-height: 500px;
+            margin-top: 80px;
+        }
+        .main-title {
+            font-size: 8vw;
+            color: #ffd700;
+            text-shadow: 0 0 40px #f5c54288, 0 0 10px #000;
+            letter-spacing: 5px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.1;
+        }
+        @media (max-width: 600px) {
+            .main-title { font-size: 12vw; }
+        }
+        /* Stili per i riquadri degli eventi */
+        .events-container {
+            display: flex;
+            overflow-x: auto; /* Abilita lo scorrimento orizzontale */
+            scroll-snap-type: x mandatory; /* Fa scattare lo scorrimento ai riquadri */
+            padding-bottom: 15px; /* Spazio per evitare che l'ombra venga tagliata */
+            gap: 20px;
+            margin-top: 20px;
+            padding-left: 20px; /* Spazio a sinistra */
+            padding-right: 20px; /* Spazio a destra */
+        }
+        .event-box {
+            background: #111;
+            border: 2px solid #f5c542;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #ffd700;
+            box-shadow: 0 0 10px #f5c54255;
+            width: 300px; /* Larghezza fissa per i riquadri */
+            flex: none; /* Impedisce ai riquadri di ridimensionarsi */
+            scroll-snap-align: start; /* Allinea l'inizio del riquadro al contenitore */
+        }
+        .event-box h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        .event-box p {
+            font-size: 1.1em;
+        }
+        /* Stili per la tabella degli ordini */
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #f5c542;
+            text-align: center;
+        }
+        th {
+            background-color: #111;
+            color: #ffd700;
+        }
+        tr:nth-child(even) {
+            background-color: #232323;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const eventsContainer = document.querySelector('.events-container');
+
+            eventsContainer.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                eventsContainer.scrollLeft += e.deltaY;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <img src="{% static 'images/gn_oro.png' %}" alt="Logo GN SHOP" class="logo">
+        <div class="nav-links">
+            <a href="{% url 'home' %}">HOME</a>
+            <a href="{% url 'ordini' %}">ORDINI</a>
+            <a href="{% url 'news' %}">NEWS</a>
+            <a href="{% url 'catalogo' %}">CATALOGO</a>
+            <a href="{% url 'programma_fidelity' %}">PROGRAMMA FIDELITY</a>
+            <a href="{% url 'contatti' %}">CONTATTI</a>
+            <a href="{% url 'recensioni' %}">RECENSIONI</a>
+            <a href="{% url 'staff' %}">STAFF</a>
+        </div>
+    </div>
+    <div class="center-content">
+        <div class="main-title">{{ section_name }}</div>
+        {% if section_name == "NEWS" %}
+            <p style="font-size:1.3em; color:#fff; text-align:center; margin-top:10px;">
+                Qui troverai tutti gli eventi, i tornei e le offerte che si terranno al negozio.
+            </p>
+            <div class="events-container">
+                <div class="event-box">
+                    <h3>TORNEO FIFA</h3>
+                    <p>28/07/2025</p>
+                </div>
+                <div class="event-box">
+                    <h3>SCONTO 20%</h3>
+                    <p>Su tutti i prodotti dal 15 al 22 Luglio 2025</p>
+                </div>
+                <div class="event-box">
+                    <h3>TORNEO R6</h3>
+                    <p>01/09/2025</p>
+                </div>
+                <div class="event-box">
+                    <h3>NOLEGGIO CON IL 15% DI SCONTO</h3>
+                    <p>Dal 13 al 25 Settembre 2025</p>
+                </div>
+            </div>
+        {% elif section_name == "ORDINI" %}
+            <h2 style="color:#fff; text-align:center;">Storico Ordini</h2>
+            {% if user.is_authenticated %}
+            <table>
+                <thead>
+                    <tr style="background-color: #111; color: #ffd700;">
+                        <th style="padding: 10px; border: 1px solid #f5c542;">Numero Ordine</th>
+                        <th style="padding: 10px; border: 1px solid #f5c542;">Data</th>
+                        <th style="padding: 10px; border: 1px solid #f5c542;">Tipo</th>
+                        <th style="padding: 10px; border: 1px solid #f5c542;">Titolo</th>
+                        <th style="padding: 10px; border: 1px solid #f5c542;">Prezzo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ordine in ordini_vendita %}
+                    <tr style="background-color: #232323; color: #fff;">
+                        <td>{{ ordine.pk }}</td>
+                        <td>{{ ordine.data_acquisto }}</td>
+                        <td>Acquisto</td>
+                        <td>{{ ordine.id_gioco.titolo }}</td>
+                        <td>€{{ ordine.totale }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% for ordine in ordini_noleggio %}
+                    <tr style="background-color: #232323; color: #fff;">
+                        <td>{{ ordine.pk }}</td>
+                        <td>{{ ordine.inizio_noleggio }}</td>
+                        <td>Noleggio</td>
+                        <td>{{ ordine.id_gioco.titolo }}</td>
+                        <td>€{{ ordine.totale_noleggio }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% if not ordini_vendita and not ordini_noleggio %}
+                    <tr><td colspan="5" style="color:#fff;">Nessun ordine presente.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            {% else %}
+            <p style="color:#fff; text-align:center;">Effettua il login per vedere i tuoi ordini.</p>
+            {% endif %}
+        {% elif section_name == "CATALOGO" %}
+            <h2 style="color:#fff; text-align:center;">Catalogo Videogiochi</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <input type="text" id="search-bar" placeholder="Cerca un gioco..." oninput="searchGames()" style="padding: 10px; width: 300px; border-radius: 5px; border: 1px solid #f5c542;">
+            </div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <button id="all-btn" onclick="filterCatalog('all')" style="padding: 10px 20px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; cursor: pointer;">Tutti</button>
+                <button id="vendita-btn" onclick="filterCatalog('vendita')" style="padding: 10px 20px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; cursor: pointer;">Vendita</button>
+                <button id="noleggio-btn" onclick="filterCatalog('noleggio')" style="padding: 10px 20px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; cursor: pointer;">Noleggio</button>
+            </div>
+            <div id="catalog-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+                {% for gioco in giochi %}
+                <div class="catalog-item" data-type="vendita" data-title="{{ gioco.titolo }}" data-genre="{{ gioco.genere }}" data-quantity="{{ gioco.disponibilita }}" data-price="{{ gioco.prezzo_vendita }}" style="background: linear-gradient(135deg, #232323, #111); padding: 20px; border-radius: 10px; width: 200px; text-align: center; cursor: pointer; transition: background 0.3s; margin-bottom: 10px;">
+                    <h3 style="color: #ffd700;">{{ gioco.titolo }}</h3>
+                    <p style="color: #fff;">Genere: {{ gioco.genere }}</p>
+                    <p style="color: #fff;">Prezzo: €{{ gioco.prezzo_vendita }}</p>
+                    <p class="quantity" style="color: #fff;">Quantità: {{ gioco.disponibilita }}</p>
+                    {% if gioco.disponibilita > 0 %}
+                    <form method="post" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <input type="hidden" name="gioco_id" value="{{ gioco.id }}">
+                        <input type="hidden" name="tipo" value="vendita">
+                        <button type="submit" style="padding: 8px 16px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; cursor: pointer;">Acquista</button>
+                    </form>
+                    {% else %}
+                    <span style="color: #ff4444; font-weight: bold;">Terminato</span>
+                    {% endif %}
+                </div>
+                <div class="catalog-item" data-type="noleggio" data-title="{{ gioco.titolo }}" data-genre="{{ gioco.genere }}" data-quantity="{{ gioco.disponibilita }}" data-price="{{ gioco.prezzo_noleggio }}" style="background: linear-gradient(135deg, #232323, #111); padding: 20px; border-radius: 10px; width: 200px; text-align: center; cursor: pointer; transition: background 0.3s; margin-bottom: 10px;">
+                    <h3 style="color: #ffd700;">{{ gioco.titolo }}</h3>
+                    <p style="color: #fff;">Genere: {{ gioco.genere }}</p>
+                    <p style="color: #fff;">Prezzo Noleggio: €{{ gioco.prezzo_noleggio }}</p>
+                    <p class="quantity" style="color: #fff;">Quantità: {{ gioco.disponibilita }}</p>
+                    {% if gioco.disponibilita > 0 %}
+                        {% if abbonato %}
+                        <form method="post" style="margin-top: 10px;">
+                            {% csrf_token %}
+                            <input type="hidden" name="gioco_id" value="{{ gioco.id }}">
+                            <input type="hidden" name="tipo" value="noleggio">
+                            <button type="submit" style="padding: 8px 16px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; cursor: pointer;">Noleggia</button>
+                        </form>
+                        {% else %}
+                        <button disabled style="padding: 8px 16px; border-radius: 5px; background: #888; color: #fff; border: none; margin-top: 10px;">Abbonati per noleggiare</button>
+                        {% endif %}
+                    {% else %}
+                    <span style="color: #ff4444; font-weight: bold;">Terminato</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <script>
+                function filterCatalog(type) {
+                    const items = document.querySelectorAll('.catalog-item');
+                    const buttons = {
+                        all: document.getElementById('all-btn'),
+                        vendita: document.getElementById('vendita-btn'),
+                        noleggio: document.getElementById('noleggio-btn')
+                    };
+                    Object.values(buttons).forEach(button => {
+                        button.style.background = 'linear-gradient(90deg, #ffd700, #b8860b)';
+                        button.style.color = '#181818';
+                    });
+                    buttons[type].style.background = '#000';
+                    buttons[type].style.color = '#fff';
+                    items.forEach(item => {
+                        if (type === 'all' || item.getAttribute('data-type') === type) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+                function searchGames() {
+                    const query = document.getElementById('search-bar').value.toLowerCase();
+                    const items = document.querySelectorAll('.catalog-item');
+                    items.forEach(item => {
+                        const title = item.getAttribute('data-title').toLowerCase();
+                        if (title.includes(query)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    filterCatalog('all');
+                });
+            </script>
+        {% elif section_name == "PROGRAMMA FIDELITY" %}
+            <h2 style="color:#fff; text-align:center;">Programma Fidelity</h2>
+            {% if user.is_authenticated %}
+                {% if abbonato %}
+                    <div style="color:#fff; text-align:center; margin:20px;">
+                        <b>Sei già abbonato al programma fidelity!</b><br>
+                        Tipo: {{ fidelity.tipo_abbonamento }}<br>
+                        Dal: {{ fidelity.data_inizio }} al {{ fidelity.data_fine }}<br>
+                        Sconto noleggio: {{ fidelity.sconto_noleggio }}%
+                    </div>
+                {% else %}
+                    <form method="post" style="text-align:center; margin:20px;">
+                        {% csrf_token %}
+                        <button type="submit" style="padding: 12px 30px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; font-size:1.2em; cursor: pointer;">Abbonati a €10/mese</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <p style="color:#fff; text-align:center;">Effettua il login per abbonarti al programma fidelity.</p>
+            {% endif %}
+        {% elif section_name == "CONTATTI" %}
+            <h2 style="color:#fff; text-align:center;">Contatti</h2>
+            <div style="background: #181818; border-radius: 10px; box-shadow: 0 0 20px #f5c54233; padding: 30px 40px; max-width: 500px; margin: 0 auto; color: #fff;">
+                <p><b>Email:</b> info@gnshop.it</p>
+                <p><b>Telefono:</b> 0123 456789</p>
+                <p><b>Indirizzo:</b> Via dei Videogiochi, 42, 20100 Milano (MI)</p>
+                <p><b>Sede Legale:</b> Via Legale, 1, 20100 Milano (MI)</p>
+                <p><b>Partita IVA:</b> 12345678901</p>
+                <p><b>Orari:</b> Lun-Sab 9:00-19:30</p>
+                <p><b>Social:</b> <a href="#" style="color:#ffd700;">Instagram</a> | <a href="#" style="color:#ffd700;">Facebook</a></p>
+            </div>
+        {% elif section_name == "RECENSIONI" %}
+            <h2 style="color:#fff; text-align:center;">Recensioni</h2>
+            {% if user.is_authenticated %}
+            <form method="post" id="recensione-form" style="background: #181818; border-radius: 10px; box-shadow: 0 0 20px #f5c54233; padding: 25px 30px; max-width: 500px; margin: 0 auto 30px auto; color: #fff;">
+                {% csrf_token %}
+                <label for="id_gioco">Gioco:</label>
+                <select name="id_gioco" id="id_gioco" required style="width:100%;padding:8px;margin-bottom:10px;">
+                    <option value="">Seleziona un gioco</option>
+                    {% for gioco in giochi %}
+                        <option value="{{ gioco.id }}" {% if gioco.id not in giochi_acquistati_ids %}disabled style="color:#888;"{% endif %}>
+                            {{ gioco.titolo }}{% if gioco.id not in giochi_acquistati_ids %} (Non acquistato){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="valutazione">Valutazione:</label>
+                <div id="star-rating" style="font-size:2em; color:#888; margin-bottom:10px; cursor:pointer; display:flex; gap:5px;">
+                    <span class="star" data-value="1" style="transition:color 0.2s;">&#9733;</span>
+                    <span class="star" data-value="2" style="transition:color 0.2s;">&#9733;</span>
+                    <span class="star" data-value="3" style="transition:color 0.2s;">&#9733;</span>
+                    <span class="star" data-value="4" style="transition:color 0.2s;">&#9733;</span>
+                    <span class="star" data-value="5" style="transition:color 0.2s;">&#9733;</span>
+                </div>
+                <input type="hidden" name="valutazione" id="valutazione" required>
+                <label for="testo">Recensione:</label>
+                <textarea name="testo" id="testo" rows="3" required style="width:100%;padding:8px;margin-bottom:10px;"></textarea>
+                <button type="submit" style="padding: 10px 20px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; font-size:1em; cursor: pointer;">Invia Recensione</button>
+            </form>
+            <script>
+                const stars = document.querySelectorAll('#star-rating .star');
+                const inputVal = document.getElementById('valutazione');
+                let selected = 0;
+                stars.forEach((star, idx) => {
+                    star.addEventListener('mouseover', function() {
+                        stars.forEach((s, i) => {
+                            s.style.color = i <= idx ? '#ffd700' : '#888';
+                        });
+                    });
+                    star.addEventListener('mouseout', function() {
+                        stars.forEach((s, i) => {
+                            s.style.color = i < selected ? '#ffd700' : '#888';
+                        });
+                    });
+                    star.addEventListener('click', function() {
+                        selected = idx + 1;
+                        inputVal.value = selected;
+                        stars.forEach((s, i) => {
+                            s.style.color = i < selected ? '#ffd700' : '#888';
+                        });
+                    });
+                });
+                document.getElementById('recensione-form').addEventListener('submit', function(e) {
+                    if (!inputVal.value) {
+                        e.preventDefault();
+                        alert('Seleziona una valutazione con le stelle!');
+                    }
+                });
+            </script>
+            {% else %}
+            <p style="color:#fff; text-align:center;">Effettua il login per lasciare una recensione.</p>
+            {% endif %}
+            <div style="max-width: 700px; margin: 0 auto;">
+                {% for recensione in recensioni %}
+                <div style="background: #232323; border-radius: 8px; box-shadow: 0 0 10px #f5c54222; margin-bottom: 18px; padding: 18px 22px; color: #fff;">
+                    <b>{{ recensione.id_cliente.first_name }} {{ recensione.id_cliente.last_name }}</b> su <b>{{ recensione.id_gioco.titolo }}</b> -
+                    <span style="color:#ffd700;">{{ recensione.valutazione }}★</span>
+                    <span style="float:right; color:#aaa; font-size:0.9em;">{{ recensione.data }}</span>
+                    <div style="margin-top:8px;">{{ recensione.testo }}</div>
+                </div>
+                {% empty %}
+                <p style="color:#fff; text-align:center;">Nessuna recensione presente.</p>
+                {% endfor %}
+            </div>
+        {% elif section_name == "STAFF" %}
+            {% if staff_access %}
+            <h2 style="color:#fff; text-align:center;">Area Staff</h2>
+            <div style="background: #181818; border-radius: 10px; box-shadow: 0 0 20px #f5c54233; padding: 25px 30px; max-width: 700px; margin: 0 auto 30px auto; color: #fff; text-align:center;">
+                <b>Benvenuto nell'area riservata allo staff!</b>
+            </div>
+            <div style="max-width:400px;margin:0 auto 20px auto;text-align:center;">
+                <input type="text" id="staff-search" placeholder="Cerca per qualsiasi dato (ordine, nome, cognome, gioco...)" style="padding:8px;width:70%;border-radius:5px;border:1px solid #ffd700;">
+            </div>
+            <h3 style="color:#ffd700;text-align:center;">Ordini Vendita</h3>
+            <table id="vendita-table">
+                <thead>
+                    <tr><th>ID</th><th>Cliente</th><th>Gioco</th><th>Totale</th><th>Data</th><th>Tipo Pagamento</th><th>Quantità</th></tr>
+                </thead>
+                <tbody>
+                {% for ordine in ordini_vendita %}
+                    <tr>
+                        <td>{{ ordine.pk }}</td>
+                        <td>{{ ordine.cliente.first_name }} {{ ordine.cliente.last_name }} ({{ ordine.cliente.username }})</td>
+                        <td>{{ ordine.id_gioco.titolo }}</td>
+                        <td>€{{ ordine.totale }}</td>
+                        <td>{{ ordine.data_acquisto }}</td>
+                        <td>{{ ordine.tipo_pagamento }}</td>
+                        <td>{{ ordine.quantita }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="7">Nessun ordine vendita trovato.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <h3 style="color:#ffd700;text-align:center;">Ordini Noleggio</h3>
+            <table id="noleggio-table">
+                <thead>
+                    <tr><th>ID</th><th>Cliente</th><th>Gioco</th><th>Totale</th><th>Inizio</th><th>Fine</th></tr>
+                </thead>
+                <tbody>
+                {% for ordine in ordini_noleggio %}
+                    <tr>
+                        <td>{{ ordine.pk }}</td>
+                        <td>{{ ordine.id_cliente.first_name }} {{ ordine.id_cliente.last_name }} ({{ ordine.id_cliente.username }})</td>
+                        <td>{{ ordine.id_gioco.titolo }}</td>
+                        <td>€{{ ordine.totale_noleggio }}</td>
+                        <td>{{ ordine.inizio_noleggio }}</td>
+                        <td>{{ ordine.fine_noleggio }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6">Nessun ordine noleggio trovato.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <script>
+            document.getElementById('staff-search').addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                [document.getElementById('vendita-table'), document.getElementById('noleggio-table')].forEach(function(table) {
+                    const rows = table.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const text = row.innerText.toLowerCase();
+                        if (text.includes(query) || query === "") {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            </script>
+            {% else %}
+            <h2 style="color:#fff; text-align:center;">Accesso Staff</h2>
+            {% if staff_error %}
+                <p style="color:#ff4444; text-align:center;">{{ staff_error }}</p>
+            {% endif %}
+            <form method="post" style="background: #181818; border-radius: 10px; box-shadow: 0 0 20px #f5c54233; padding: 25px 30px; max-width: 400px; margin: 0 auto 30px auto; color: #fff;">
+                {% csrf_token %}
+                <label for="codice_staff">Inserisci il tuo codice staff personale:</label>
+                <input type="password" name="codice_staff" id="codice_staff" required style="width:100%;padding:8px;margin-bottom:10px;">
+                <button type="submit" style="padding: 10px 20px; border-radius: 5px; background: linear-gradient(90deg, #ffd700, #b8860b); border: none; font-size:1em; cursor: pointer;">Accedi</button>
+            </form>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
